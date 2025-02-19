@@ -132,11 +132,11 @@ const Home = () => {
       {/* Hero Section */}
       <section className="min-h-[90vh] flex flex-col items-center justify-center px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-bold font-serif mb-4">
-            <span className="block text-6xl sm:text-7xl mb-2 animate-gradient-text">
-              Hello
+          <h1 className="font-bold mb-4">
+            <span className="block text-4xl sm:text-7xl mb-2 animate-gradient-text font-serif">
+              Hello,
             </span>
-            <span className="block text-6xl sm:text-7xl animate-gradient-text">
+            <span className="block text-6xl sm:text-7xl animate-gradient-text font-serif">
               I'm Ambica Dasari!
             </span>
           </h1>
@@ -295,7 +295,7 @@ const Home = () => {
             Let's Connect
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-12">
-            I'm always interested in hearing about new projects and opportunities.
+            I'm always interested in hearing about new opportunities and projects.
           </p>
           <motion.a
             href="mailto:your.email@example.com"

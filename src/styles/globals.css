@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add animation styles */
+.animate-gradient-text {
+  background-size: 200% auto;
+  background-image: linear-gradient(
+    45deg,
+    #4f46e5,
+    #9333ea,
+    #4f46e5
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-text 3s linear infinite;
+}
+
+/* Custom styles */
+body {
+  @apply bg-white dark:bg-black text-black dark:text-white;
+} 

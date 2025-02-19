@@ -1,33 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   darkMode: 'class',
   theme: {
     extend: {
-      colors: {
-        black: '#000000',
-        white: '#ffffff',
-        primary: "#000000",
-        secondary: "#ffffff",
-        accent: "#666666",
+      animation: {
+        'gradient-text': 'gradient-text 5s ease infinite',
       },
-      backgroundColor: {
-        dark: '#000000',
-      },
-      textColor: {
-        dark: '#ffffff',
-      },
-      borderColor: {
-        dark: '#ffffff',
-      },
-      fontFamily: {
-        sans: ['var(--font-space-grotesk)'],
-        playfair: ['var(--font-playfair)'],
-      },
+      keyframes: {
+        'gradient-text': {
+          '0%, 100%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
+        },
+      }
     },
   },
   plugins: [],
