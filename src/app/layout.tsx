@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
+import { Analytics } from '@vercel/analytics/react'
 
 const playfair = Playfair_Display({ 
   subsets: ['latin'],
@@ -24,6 +25,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <Analytics />
       </body>
     </html>
   )

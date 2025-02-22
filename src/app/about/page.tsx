@@ -61,7 +61,7 @@ const AboutPage = () => {
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
       {/* About Me Section */}
       <section className="pt-20 px-4 md:px-8 max-w-6xl mx-auto">
-        <h1 className="text-5xl md:text-6xl font-bold mb-6">About Me</h1>
+        <h1 className="text-5xl md:text-6xl font-bold mb-8">About Me</h1>
         <div className="flex items-start gap-8 mb-6">
           {/* Profile Image */}
           <div className="w-64 h-80 relative overflow-hidden border-4 border-gray-200 dark:border-white/10 shadow-lg">
@@ -72,7 +72,7 @@ const AboutPage = () => {
             <h3 className="text-2xl md:text-3xl font-semibold mb-4">{aboutMe.title}</h3>
             <div className="mb-4">
               {aboutMe.description.map((text, index) => (
-                <p key={index} className="text-gray-700 dark:text-gray-300 mb-4">
+                <p key={index} className="text-lg text-gray-700 dark:text-gray-300 mb-4">
                   {text}
                 </p>
               ))}
@@ -86,7 +86,7 @@ const AboutPage = () => {
         <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-gradient-text">What I Do</h2>
         <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-4">
           {whatIDo.map((item, index) => (
-            <li key={index}>
+            <li key={index} className="text-lg">
               <strong>{item.title}:</strong> {item.description}
             </li>
           ))}
@@ -95,9 +95,9 @@ const AboutPage = () => {
 
       {/* My Journey Section */}
       <section className="py-16 px-4 md:px-8 max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-gradient-text">My Journey</h2>
+        <h2 className="text-5xl md:text-5xl md:leading-[1.5] font-bold mb-6 animate-gradient-text">My Journey</h2>
         {journey.map((text, index) => (
-          <p key={index} className="text-gray-700 dark:text-gray-300 mb-4">
+          <p key={index} className="text-lg text-gray-700 dark:text-gray-300 mb-4">
             {text}
           </p>
         ))}
@@ -108,7 +108,9 @@ const AboutPage = () => {
         <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-gradient-text">What Excites Me</h2>
         <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-4">
           {interests.map((interest, index) => (
-            <li key={index}>{interest}</li>
+            <li key={index} className="text-lg">
+              {interest}
+            </li>
           ))}
         </ul>
       </section>
@@ -118,7 +120,7 @@ const AboutPage = () => {
         <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-gradient-text">Hobbies & Interests</h2>
         <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-4">
           {hobbies.map((hobby, index) => (
-            <li key={index}>
+            <li key={index} className="text-lg">
               {hobby.emoji} <strong>{hobby.name}:</strong> {hobby.description}
             </li>
           ))}
@@ -128,7 +130,7 @@ const AboutPage = () => {
       {/* Let's Connect Section */}
       <section className="py-16 px-4 md:px-8 max-w-6xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-gradient-text">Let's Connect!</h2>
-        <p className="text-gray-700 dark:text-gray-300 mb-6">
+        <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
           I'm always open to new opportunities, collaborations, and discussions on <strong>data engineering, cloud computing, and big data analytics</strong>. Feel free to explore my <strong>projects and resume</strong>, or reach out for a chat!
         </p>
         <p className="text-gray-700 dark:text-gray-300 mb-4">

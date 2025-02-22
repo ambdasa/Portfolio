@@ -2,6 +2,8 @@
 
 import React from 'react';
 import type { NextPage } from 'next';
+import { motion } from 'framer-motion';
+import { useTheme } from 'next-themes';
 
 interface Experience {
   title: string;
@@ -49,6 +51,8 @@ const experiences: Experience[] = [
 ];
 
 const ExperiencePage: NextPage = () => {
+  const { theme } = useTheme();
+
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
       {/* Experience Section */}
@@ -77,7 +81,7 @@ const ExperiencePage: NextPage = () => {
               
               <ul className="space-y-4 text-gray-600 dark:text-gray-300">
                 {exp.achievements.map((achievement, idx) => (
-                  <li key={idx} className="relative pl-6 before:content-['•'] before:absolute before:left-0 before:text-blue-500">
+                  <li key={idx} className="relative pl-6 text-lg before:content-['•'] before:absolute before:left-0 before:text-blue-500">
                     {achievement}
                   </li>
                 ))}
@@ -91,36 +95,99 @@ const ExperiencePage: NextPage = () => {
       <section className="py-20 px-4 md:px-8 max-w-6xl mx-auto mt-12">
         <h2 className="text-5xl md:text-4xl font-bold mb-12">My Technical Arsenal</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Cloud & Infrastructure</h3>
-            <div className="flex flex-wrap gap-2">
-              {['AWS', 'Apache Kafka', 'Lambda', 'S3', 'Auto-scaling', 'High Availability'].map((skill) => (
-                <span key={skill} className="px-3 py-1 bg-black/5 dark:bg-white/10 rounded-full text-sm">
+          <motion.div
+            className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl p-8"
+            whileHover={{
+              scale: 1.03,
+              boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+            }}
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut"
+            }}
+          >
+            <h3 className="text-2xl font-bold font-serif mb-6">Cloud & Infrastructure</h3>
+            <div className="flex flex-wrap gap-3">
+              {['AWS', 'Apache Kafka', 'Lambda', 'S3', 'Auto-scaling', 'High Availability'].map((skill, skillIndex) => (
+                <motion.span
+                  key={skillIndex}
+                  className="px-4 py-2 bg-black/5 dark:bg-white/10 rounded-full text-sm"
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: theme === 'dark' ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                  }}
+                  transition={{ 
+                    duration: 0.2,
+                    ease: "easeInOut"
+                  }}
+                >
                   {skill}
-                </span>
+                </motion.span>
               ))}
             </div>
-          </div>
-          <div className="p-6 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Data Engineering</h3>
-            <div className="flex flex-wrap gap-2">
-              {['Python', 'Apache Airflow', 'ETL', 'Data Processing', 'GDPR Compliance', 'ML'].map((skill) => (
-                <span key={skill} className="px-3 py-1 bg-black/5 dark:bg-white/10 rounded-full text-sm">
+          </motion.div>
+          <motion.div
+            className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl p-8"
+            whileHover={{
+              scale: 1.03,
+              boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+            }}
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut"
+            }}
+          >
+            <h3 className="text-xl font-bold font-serif mb-6">Data Engineering</h3>
+            <div className="flex flex-wrap gap-3">
+              {['Python', 'Apache Airflow', 'ETL', 'Data Processing', 'GDPR Compliance', 'ML'].map((skill, skillIndex) => (
+                <motion.span
+                  key={skillIndex}
+                  className="px-4 py-2 bg-black/5 dark:bg-white/10 rounded-full text-sm"
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: theme === 'dark' ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                  }}
+                  transition={{ 
+                    duration: 0.2,
+                    ease: "easeInOut"
+                  }}
+                >
                   {skill}
-                </span>
+                </motion.span>
               ))}
             </div>
-          </div>
-          <div className="p-6 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4">Analytics & Visualization</h3>
-            <div className="flex flex-wrap gap-2">
-              {['Power BI', 'Data Analysis', 'Reporting', 'Dashboard Design', 'Business Intelligence'].map((skill) => (
-                <span key={skill} className="px-3 py-1 bg-black/5 dark:bg-white/10 rounded-full text-sm">
+          </motion.div>
+          <motion.div
+            className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl p-8"
+            whileHover={{
+              scale: 1.03,
+              boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+            }}
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut"
+            }}
+          >
+            <h3 className="text-xl font-bold font-serif mb-6">Analytics & Visualization</h3>
+            <div className="flex flex-wrap gap-3">
+              {['Power BI', 'Data Analysis', 'Reporting', 'Dashboard Design', 'Business Intelligence'].map((skill, skillIndex) => (
+                <motion.span
+                  key={skillIndex}
+                  className="px-4 py-2 bg-black/5 dark:bg-white/10 rounded-full text-sm"
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: theme === 'dark' ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                  }}
+                  transition={{ 
+                    duration: 0.2,
+                    ease: "easeInOut"
+                  }}
+                >
                   {skill}
-                </span>
+                </motion.span>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>

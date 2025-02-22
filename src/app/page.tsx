@@ -4,28 +4,31 @@ import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
+import ParticlesDynamic from '../components/ParticlesDynamic'
+import ViewCounter from '@/components/ViewCounter'
+import Image from 'next/image'
 
 const projects = [
   {
     title: 'Stock Market Real-Time Data Analysis',
-    description: 'Architected and deployed a fault-tolerant real-time stock analysis pipeline using Apache Kafka and AWS MSK, implementing dead-letter queues and retry mechanisms for zero data loss. Integrated comprehensive monitoring using CloudWatch and Grafana dashboards, enabling real-time system health tracking and achieving 99.9% uptime.',
-    period: 'Aug 2024 – Nov 2024',
-    skills: ['Apache Kafka', 'Real-Time Data Processing', 'Stream Processing', 'Spark', 'SQL'],
-    github: 'https://github.com/ambdasa/stock-market-data-analysis-kafka'
+    github: 'https://github.com/ambdasa/stock-market-data-analysis-kafka',
+    image: '/project-images/stock-market.jpeg',
+    skills: ['Apache Kafka', 'Real-Time Data', 'Spark Streaming'],
+    description: 'Real-time processing of stock market data using Apache Kafka and Spark Streaming for instant analytics and trend prediction.'
   },
   {
-    title: 'YouTube Data Pipeline Optimization',
-    description: 'Designed and implemented a serverless ETL pipeline using AWS Step Functions and Lambda functions, reducing processing costs by 60% through optimized S3 storage patterns and Athena partition pruning. Integrated automated data quality checks using Great Expectations framework, achieving 99% anomaly detection rate in data processing workflows.',
-    period: 'Apr 2024 – Jul 2024',
-    skills: ['AWS (S3, Glue, Athena, Lambda)', 'Data Lake Creation', 'ETL', 'SQL', 'Data Preprocessing', 'Cloud Security'],
-    github: 'https://github.com/ambdasa/de-youtube-data-pipeline-optimization'
+    title: 'YouTube Data Pipeline Optimization', 
+    github: 'https://github.com/ambdasa/de-youtube-data-pipeline-optimization',
+    image: '/project-images/youtube-pipeline.jpg',
+    skills: ['AWS Glue', 'Data Lake', 'ETL'],
+    description: 'Optimized ETL pipeline handling 10TB+ daily data with AWS Glue, reducing processing time by 40%.'
   },
   {
     title: 'Power BI Project',
-    description: 'Coming soon...',
-    period: 'Coming soon',
-    skills: ['Power BI', 'Data Visualization', 'Analytics'],
-    github: '#'
+    github: '#',
+    image: '/project-images/power-bi.jpg',
+    skills: ['Data Visualization', 'Dashboarding', 'Analytics'],
+    description: 'Currently working on this Power BI project.'
   }
 ];
 
@@ -74,6 +77,10 @@ const skillCategories = [
     skills: ['Python', 'C++', 'Java', 'R', 'C', 'HTML', 'CSS', 'PHP', 'JavaScript']
   },
   {
+    title: 'Databases',
+    skills: ['PostgreSQL', 'MySQL', 'SQL', 'Supabase', 'Snowflake', 'Firebase']
+  },
+  {
     title: 'Development and Data Tools',
     skills: ['Apache Kafka', 'Apache Spark', 'Git', 'Docker', 'Real-Time Data Processing', 'ETL & Data Pipelines']
   },
@@ -86,10 +93,6 @@ const skillCategories = [
     skills: ['Pandas', 'NumPy', 'PySpark', 'Matplotlib', 'Express', 'Flask', 'Power BI', 'Tableau']
   },
   {
-    title: 'Databases',
-    skills: ['PostgreSQL', 'MySQL', 'SQL', 'Supabase', 'Snowflake', 'Firebase']
-  },
-  {
     title: 'Others',
     skills: ['Data Warehousing & Governance', 'Big Data Processing', 'Machine Learning & Analytics', 'System Design', 'Agile & Scrum']
   }
@@ -98,52 +101,91 @@ const skillCategories = [
 const Home = () => {
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isScrolling = useRef(true);
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
-    let scrollInterval: NodeJS.Timeout;
-    const scrollAmount = 1;
-    
-    const startScroll = () => {
-      scrollInterval = setInterval(() => {
-        if (hoveredProject === null && scrollContainer) {
-          if (scrollContainer.scrollLeft >= (scrollContainer.scrollWidth - scrollContainer.clientWidth - 10)) {
-            scrollContainer.scrollLeft = 0;
-          } else {
-            scrollContainer.scrollLeft += scrollAmount;
-          }
-        }
-      }, 30);
-    };
+    let animationFrame: number;
+    const scrollSpeed = 1.5;
+    const projectWidth = 500 + 32;
+    const totalProjects = projects.length;
 
-    startScroll();
-
-    return () => {
-      if (scrollInterval) {
-        clearInterval(scrollInterval);
+    const smoothScroll = () => {
+      if (!isScrolling.current) return;
+      
+      const maxScroll = projectWidth * totalProjects;
+      
+      if (scrollContainer.scrollLeft >= maxScroll) {
+        scrollContainer.scrollLeft = 0;
+      } else {
+        scrollContainer.scrollLeft += scrollSpeed;
       }
+      
+      animationFrame = requestAnimationFrame(smoothScroll);
     };
-  }, [hoveredProject]);
+
+    // Event handlers
+    const handleMouseEnter = () => {
+      isScrolling.current = false;
+    };
+    
+    const handleMouseLeave = () => {
+      isScrolling.current = true;
+      smoothScroll();
+    };
+
+    // Start scrolling
+    smoothScroll();
+
+    // Add event listeners
+    scrollContainer.addEventListener('mouseenter', handleMouseEnter);
+    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
+
+    // Cleanup
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      scrollContainer.removeEventListener('mouseenter', handleMouseEnter);
+      scrollContainer.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
       {/* Hero Section */}
-      <section className="min-h-[90vh] flex flex-col items-center justify-center px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-bold mb-4">
-            <span className="block text-4xl sm:text-7xl mb-2 animate-gradient-text font-serif">
+      <section className="min-h-[90vh] flex flex-col items-center justify-center px-4 relative overflow-hidden bg-white dark:bg-black">
+        <ParticlesDynamic />
+        <div className="max-w-4xl mx-auto text-center relative z-20 space-y-8">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="font-bold text-black dark:text-white"
+          >
+            <span className="block text-3xl sm:text-6xl mb-2 font-serif animate-gradient-text">
               Hello,
             </span>
-            <span className="block text-6xl sm:text-7xl animate-gradient-text font-serif">
+            <span className="block text-6xl sm:text-7xl font-serif animate-gradient-text delay-100">
               I'm Ambica Dasari!
             </span>
-          </h1>
-          <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12">
+          </motion.h1>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
+          >
             Transforming raw data into powerful insights—one pipeline at a time.
-          </p>
-          <div className="flex gap-6 justify-center">
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="flex gap-6 justify-center"
+          >
             <Link
               href="#work"
               className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-all dark:bg-white dark:text-black dark:hover:bg-gray-300"
@@ -156,7 +198,7 @@ const Home = () => {
             >
               About Me
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -170,47 +212,48 @@ const Home = () => {
           <div className="relative overflow-hidden">
             <div 
               ref={scrollRef}
-              className="flex gap-8 overflow-x-auto scrollbar-hide"
+              className="flex gap-8 overflow-x-auto scrollbar-hide scroll-container px-[5%]"
               style={{ WebkitOverflowScrolling: 'touch' }}
             >
-              {projects.map((project, index) => (
-                <motion.div
+              {[...projects, ...projects].map((project, index) => (
+                <motion.a
                   key={index}
-                  className="w-[500px] flex-none bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden hover:border-gray-400 dark:hover:border-white/30 transition-all"
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.2 }}
-                  onMouseEnter={() => setHoveredProject(index)}
-                  onMouseLeave={() => setHoveredProject(null)}
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group w-[500px] flex-none bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden block flex flex-col relative"
+                  whileHover={{ 
+                    scale: 1.03,
+                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+                  }}
                 >
-                  <div className="h-full flex flex-col p-6">
-                    <div className="mb-4">
-                      <h3 className="text-2xl font-bold font-serif mb-2">{project.title}</h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{project.period}</p>
-                      <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
-                    </div>
-                    
-                    <div className="mt-auto">
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {project.skills.map((skill, skillIndex) => (
-                          <span
-                            key={skillIndex}
-                            className="px-3 py-1 bg-black/5 dark:bg-white/10 rounded-full text-sm whitespace-nowrap"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center text-black dark:text-white hover:opacity-70 transition-opacity"
-                      >
-                        View Project →
-                      </a>
+                  <div className="flex-1 relative h-64">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-all duration-300 group-hover:blur-sm group-hover:brightness-75"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-black/50 dark:bg-black/80">
+                      <p className="text-white text-lg text-center leading-relaxed italic">
+                        {project.description}
+                      </p>
                     </div>
                   </div>
-                </motion.div>
+                  
+                  <div className="p-4 space-y-3">
+                    <h3 className="text-xl font-bold font-serif">{project.title}</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {project.skills.slice(0, 3).map((skill, idx) => (
+                        <span 
+                          key={idx}
+                          className="px-2 py-1 text-xs bg-black/5 dark:bg-white/10 rounded-full"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.a>
               ))}
             </div>
           </div>
@@ -228,17 +271,63 @@ const Home = () => {
             {experiences.map((experience, index) => (
               <motion.div
                 key={index}
-                className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl p-8"
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.2 }}
+                className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl p-12 mb-8"
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+                }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut"
+                }}
               >
-                <h3 className="text-2xl font-bold font-serif mb-2">{experience.title}</h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-2">{experience.company}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-500 mb-2">{experience.period}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-500 mb-4">{experience.location}</p>
-                <p className="text-gray-600 dark:text-gray-300">{experience.description}</p>
+                <div className="space-y-4">
+                  <h3 className="text-3xl font-bold font-serif">{experience.title}</h3>
+                  <div className="flex items-center gap-4">
+                    <span className="text-lg font-medium text-gray-600 dark:text-gray-300">{experience.company}</span>
+                    <span className="text-gray-500 dark:text-gray-400">•</span>
+                    <span className="text-gray-500 dark:text-gray-400">{experience.period}</span>
+                  </div>
+                  <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                    {experience.description}
+                  </p>
+                </div>
               </motion.div>
             ))}
+          </div>
+
+          {/* AWS Certification Card */}
+          <div className="flex justify-center w-full">
+            <motion.div
+              className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl p-12 mb-8 max-w-2xl w-full"
+              whileHover={{
+                scale: 1.03,
+                boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+              }}
+              transition={{
+                duration: 0.3,
+                ease: "easeInOut"
+              }}
+            >
+              <div className="space-y-6 text-center">
+                <h3 className="text-3xl font-bold font-serif">AWS Certified Data Engineer – Associate</h3>
+                <div className="flex items-center justify-center gap-4">
+                  <span className="text-lg font-medium text-gray-600 dark:text-gray-300">Amazon Web Services</span>
+                  <span className="text-gray-500 dark:text-gray-400">•</span>
+                  <a 
+                    href="https://www.credly.com/badges/decfa750-c714-4e1f-8c4a-82ac1d913992" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    View Credential
+                  </a>
+                </div>
+                <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed px-8">
+                  Validated expertise in designing and implementing AWS data solutions
+                </p>
+              </div>
+            </motion.div>
           </div>
 
           <div className="text-center">
@@ -264,10 +353,14 @@ const Home = () => {
               <motion.div
                 key={categoryIndex}
                 className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl p-8"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-                viewport={{ once: true }}
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+                }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut"
+                }}
               >
                 <h3 className="text-2xl font-bold font-serif mb-6">{category.title}</h3>
                 <div className="flex flex-wrap gap-3">
@@ -275,8 +368,14 @@ const Home = () => {
                     <motion.span
                       key={skillIndex}
                       className="px-4 py-2 bg-black/5 dark:bg-white/10 rounded-full text-sm"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.2 }}
+                      whileHover={{ 
+                        scale: 1.05,
+                        backgroundColor: theme === 'dark' ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+                      }}
+                      transition={{ 
+                        duration: 0.2,
+                        ease: "easeInOut"
+                      }}
                     >
                       {skill}
                     </motion.span>
@@ -307,6 +406,66 @@ const Home = () => {
           </motion.a>
         </div>
       </section>
+
+      <footer className="py-8 text-center text-gray-600 dark:text-gray-400">
+        <p className="text-sm">
+          Portfolio views: <ViewCounter />
+        </p>
+      </footer>
+
+      <nav className="fixed top-0 w-full bg-white/80 dark:bg-black/80 backdrop-blur-sm z-50 border-b border-gray-200 dark:border-white/10">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-4">
+          <div className="flex justify-between items-center">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2">
+              <span className="text-3xl font-bold text-black dark:text-white font-times-new-roman">
+                AD.
+              </span>
+            </Link>
+
+            {/* Navigation Links */}
+            <div className="flex items-center gap-6">
+              <Link href="/" className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
+                Home
+              </Link>
+              <Link href="/experience" className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
+                Experience
+              </Link>
+              <Link href="/about" className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
+                About
+              </Link>
+              <Link href="/resume" className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
+                Resume
+              </Link>
+              
+              {/* Theme Toggle */}
+              <button 
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <svg className="w-6 h-6 text-black dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {/* Sun Icon */}
+                  <path
+                    className="dark:hidden"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"
+                  />
+                  {/* Moon Icon */}
+                  <path
+                    className="hidden dark:block"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
     </div>
   );
 };

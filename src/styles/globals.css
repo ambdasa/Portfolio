@@ -4,20 +4,166 @@
 
 /* Add animation styles */
 .animate-gradient-text {
-  background-size: 200% auto;
-  background-image: linear-gradient(
+  background: linear-gradient(
     45deg,
     #4f46e5,
     #9333ea,
     #4f46e5
   );
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   animation: gradient-text 3s linear infinite;
 }
 
+@keyframes gradient-text {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
 /* Custom styles */
 body {
   @apply bg-white dark:bg-black text-black dark:text-white;
+}
+
+.scroll-container {
+  scroll-behavior: smooth;
+  overflow-x: scroll;
+  position: relative;
+  @apply px-[5%] py-4;
+}
+
+/* Remove mask gradient */
+.scroll-container {
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+/* Add fade overlay */
+.scroll-container::before,
+.scroll-container::after {
+  content: '';
+  @apply absolute top-0 bottom-0 w-48 z-20 pointer-events-none;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0.9) 0%,
+    rgba(255,255,255,0) 100%
+  );
+}
+
+.scroll-container::after {
+  right: 0;
+  transform: rotate(180deg);
+}
+
+.dark .scroll-container::before,
+.dark .scroll-container::after {
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.9) 0%,
+    rgba(0,0,0,0) 100%
+  );
+}
+
+/* Allow cards to overflow */
+.scroll-container {
+  @apply overflow-x-visible;
+}
+
+.project-card {
+  @apply overflow-visible mx-4;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.project-card img {
+  @apply w-full h-full object-cover;
+}
+
+/* Base font size */
+html {
+  font-size: 18px;
+}
+
+@screen md {
+  html {
+    font-size: 20px;
+  }
+}
+
+/* Custom Font Classes */
+.font-dancing {
+  font-family: 'Dancing Script', cursive;
+  font-weight: 700;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-times-new-roman {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.project-image {
+  border-radius: 12px 12px 0 0;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image {
+  transform: scale(1.02);
+}
+
+.scroll-container .project-card {
+  @apply relative transition-all duration-500;
+  transform-origin: center;
+}
+
+/* Fade-out effect for cards */
+.project-card {
+  opacity: 1;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.scroll-container:hover .project-card {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.scroll-container .project-card:hover {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  z-index: 10;
+}
+
+/* Edge fade effect */
+.scroll-container::before,
+.scroll-container::after {
+  content: '';
+  @apply absolute top-0 bottom-0 w-48 z-20 pointer-events-none;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0.9) 0%,
+    rgba(255,255,255,0) 100%
+  );
+}
+
+.scroll-container::after {
+  right: 0;
+  transform: rotate(180deg);
+}
+
+.dark .scroll-container::before,
+.dark .scroll-container::after {
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.9) 0%,
+    rgba(0,0,0,0) 100%
+  );
 } 
